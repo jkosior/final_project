@@ -1,0 +1,8 @@
+bossLikesMe = null
+
+while bossLikesMe = True:
+    contacts = {
+    'number': 512348504,
+    'email': jakubjkosior@gmail.com,
+    'github': https://github.com/jkosior
+    }
