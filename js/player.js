@@ -7,6 +7,7 @@ loadImage('aragorn')
 loadImage('hood_black2')
 loadImage('leg_armor00')
 loadImage('finisher')
+loadImage('finisher_2')
 loadImage('h_r_1')
 function loadImage(name){
   images[name] = new Image();
@@ -40,19 +41,19 @@ mana.style.color = "white";
 
 function redraw(){
   canvas.width = canvas.width
-  // context.drawImage(images["demigod_m"], characterX, characterY);
-  // context.drawImage(images["aragorn"], characterX, characterY);
-  // context.drawImage(images["hood_black2"], characterX, characterY);
-  // context.drawImage(images["leg_armor00"], characterX, characterY);
-  // context.drawImage(images["finisher"], characterX, characterY);
-  context.drawImage(images['h_r_1'],characterX, characterY)
+  context.drawImage(images["demigod_m"], characterX, characterY);
+  context.drawImage(images["aragorn"], characterX, characterY);
+  context.drawImage(images["hood_black2"], characterX, characterY);
+  context.drawImage(images["leg_armor00"], characterX, characterY);
+  context.drawImage(images["finisher"], characterX, characterY);
+  // context.drawImage(images['h_r_1'],characterX, characterY)
   a = document.getElementById('body')
   a.addEventListener('keydown',function(e){
     switch (e.keyCode) {
       case 65:
         if (characterX > 0) {
           context.clearRect(characterX, characterY, canvas.width,canvas.height);
-          characterX--;
+          characterX = characterX -16;
           context.drawImage(images["demigod_m"], characterX, characterY);
           context.drawImage(images["aragorn"], characterX, characterY);
           context.drawImage(images["hood_black2"], characterX, characterY);
@@ -63,7 +64,7 @@ function redraw(){
       case 87:
         if (characterY>0){
           context.clearRect(characterX, characterY, canvas.width,canvas.height);
-          characterY--;
+          characterY = characterY -16;
           context.drawImage(images["demigod_m"], characterX, characterY);
           context.drawImage(images["aragorn"], characterX, characterY);
           context.drawImage(images["hood_black2"], characterX, characterY);
@@ -74,7 +75,7 @@ function redraw(){
       case 68:
         if(characterX < canvas.width){
           context.clearRect(characterX, characterY, canvas.width,canvas.height);
-          characterX++;
+          characterX = characterX +16;
           context.drawImage(images["demigod_m"], characterX, characterY);
           context.drawImage(images["aragorn"], characterX, characterY);
           context.drawImage(images["hood_black2"], characterX, characterY);
@@ -85,7 +86,7 @@ function redraw(){
       case 83:
         if (characterY < canvas.height){
         context.clearRect(characterX, characterY, canvas.width,canvas.height);
-        characterY++;
+        characterY = characterY +16;
         context.drawImage(images["demigod_m"], characterX, characterY);
         context.drawImage(images["aragorn"], characterX, characterY);
         context.drawImage(images["hood_black2"], characterX, characterY);
@@ -94,15 +95,52 @@ function redraw(){
       }
         break;
       case 81:
-        if (health.value > 0){
-        health.value = health.value - 10;}
+        context.clearRect(characterX, characterY, canvas.width,canvas.height);
+        context.drawImage(images["demigod_m"], characterX, characterY);
+        context.drawImage(images["aragorn"], characterX, characterY);
+        context.drawImage(images["hood_black2"], characterX, characterY);
+        context.drawImage(images["leg_armor00"], characterX, characterY);
+        context.drawImage(images["finisher_2"], characterX, characterY);
         break;
-      case 90:
-        if (mana.value > 0){
-          mana.value = mana.value -10;}
-          break;
-}
-// var healthBar  = setInterval()
+      case 69:
+        context.clearRect(characterX, characterY, canvas.width,canvas.height);
+        context.drawImage(images["demigod_m"], characterX, characterY);
+        context.drawImage(images["aragorn"], characterX, characterY);
+        context.drawImage(images["hood_black2"], characterX, characterY);
+        context.drawImage(images["leg_armor00"], characterX, characterY);
+        context.drawImage(images["finisher"], characterX, characterY);
+        break;
+      }
+    });
+        // var i = 0
+        // if ( i % 2 ==1){
+        //     context.clearRect(characterX, characterY, canvas.width,canvas.height);
+        //     context.drawImage(images["demigod_m"], characterX, characterY);
+        //     context.drawImage(images["aragorn"], characterX, characterY);
+        //     context.drawImage(images["hood_black2"], characterX, characterY);
+        //     context.drawImage(images["leg_armor00"], characterX, characterY);
+        //     context.drawImage(images["finisher_2"], characterX, characterY);
+        //     i++
+        //     break;
+        //
+        //   }else{
+        //
+        //   context.clearRect(characterX, characterY, canvas.width,canvas.height);
+        //   context.drawImage(images["demigod_m"], characterX, characterY);
+        //   context.drawImage(images["aragorn"], characterX, characterY);
+        //   context.drawImage(images["hood_black2"], characterX, characterY);
+        //   context.drawImage(images["leg_armor00"], characterX, characterY);
+        //   context.drawImage(images["finisher"], characterX, characterY);
+        //   i++
+        //   break;
+        // }
+
+//       case 90:
+//         if (mana.value > 0){
+//           mana.value = mana.value -10;}
+//           break;
+// }
+// // var healthBar  = setInterval()
   //   var healthInterval;
   //
   //     healthInterval = setInterval(function() {
@@ -120,7 +158,7 @@ function redraw(){
   //       }, 1000);
   //   }
 
-    });
+    // });
 
 
   // x.scale = 50%
