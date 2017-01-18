@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- {%load static%}
+<script type = "text/javascript" src="{% static 'game/js/player.js'%}"></script> -->
+</head>
+<body>
+
+  <form action="" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit"
+  value="Create player">
+
+</body>
+</html>
