@@ -14,7 +14,7 @@ var Dungeon= {
         }
 
         //Randomly generated number of rooms
-        var room_count = Helpers.GetRandom(10, 20);
+        var room_count = Randomize.GetRandom(10, 20);
         //minimum and maximum size of the rooms
         var min_size = 5;
         var max_size = 15;
@@ -22,11 +22,11 @@ var Dungeon= {
         for (var i = 0; i < room_count; i++) {
             var room = {};
             //place of the room in matrix
-            room.x = Helpers.GetRandom(1, this.data_size - max_size - 1);
-            room.y = Helpers.GetRandom(1, this.data_size - max_size - 1);
+            room.x = Randomize.GetRandom(1, this.data_size - max_size - 1);
+            room.y = Randomize.GetRandom(1, this.data_size - max_size - 1);
             //area of the room
-            room.w = Helpers.GetRandom(min_size, max_size);
-            room.h = Helpers.GetRandom(min_size, max_size);
+            room.w = Randomize.GetRandom(min_size, max_size);
+            room.h = Randomize.GetRandom(min_size, max_size);
 
             //check if rooms collide, if yes, decrement i
             if (this.DoesCollide(room)) {
@@ -49,13 +49,13 @@ var Dungeon= {
 
             //pointA = vertices of one room
             pointA = {
-                x: Helpers.GetRandom(roomA.x, roomA.x + roomA.w),
-                y: Helpers.GetRandom(roomA.y, roomA.y + roomA.h)
+                x: Randomize.GetRandom(roomA.x, roomA.x + roomA.w),
+                y: Randomize.GetRandom(roomA.y, roomA.y + roomA.h)
             };
             //pointB = vertices of second room
             pointB = {
-                x: Helpers.GetRandom(roomB.x, roomB.x + roomB.w),
-                y: Helpers.GetRandom(roomB.y, roomB.y + roomB.h)
+                x: Randomize.GetRandom(roomB.x, roomB.x + roomB.w),
+                y: Randomize.GetRandom(roomB.y, roomB.y + roomB.h)
             };
 
             //check if they are not the same
@@ -96,7 +96,7 @@ var Dungeon= {
         }
         return this.data
     },
-    //Finds closest room
+    //Finds closest room algorithm A*
     FindClosestRoom: function (room) {
         var mid = {
             x: room.x + (room.w / 2),
@@ -140,6 +140,7 @@ var Dungeon= {
             }
         }
     },
+    //check collision
     DoesCollide: function (room, ignore) {
         for (var i = 0; i < this.rooms.length; i++) {
             if (i == ignore) continue;
@@ -155,8 +156,7 @@ var Dungeon= {
 
 }
 
-
-var Helpers = {
+var Randomize = {
     GetRandom: function (low, high) {
         return Math.floor((Math.random() * (high - low)) + low);
     }
@@ -166,11 +166,20 @@ var Helpers = {
 var game = new Phaser.Game(1600, 1200, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
 
 function preload() {
+    $.ajax({
+      url:"weapons/?format=json",
+      data:{},
+      type:'GET',
+      dataType:'json',
+      success: function(json){
+
+      },
+    })
 
     //  tiles are 16x16 each
-    game.load.image('map_sheet', '../../../static/game/images/lair0.png');
+    game.load.image('map_sheet', '../../../static/game/images/ice0.png');
     // game.load.image('2', '../../../static/game/images/lair0.png');
-    game.load.image("player", '../../../static/game/images/demigod_m.png');
+    game.load.spritesheet("player_sheet", '../../../static/game/images/male_light.png',32,32  , 64);
     game.load.image("orc", '../../../static/game/images/orc_m.png');
 
 }
@@ -178,95 +187,87 @@ function preload() {
 var cursors;
 
 function create() {
-    //  Create some map data dynamically
-    //  Map size is 128x128 tiles
-
     data = Dungeon.RoomGenerator();
     matrix_stringified_lines = []
     for (var d = 0; d < data.length; d++){
       new_line = data[d].toString() + '\n';
       matrix_stringified_lines.push(new_line)
     }
-    // console.log(matrix_stringified_lines);
-    matrix_stringified_all = matrix_stringified_lines.toString();
-    // console.log(matrix_stringified_all);
-
-
-    //  Add data to the cache
+    matrix_stringified_1 = matrix_stringified_lines.toString();
+    matrix_stringified_all = ','+ matrix_stringified_1
     game.cache.addTilemap('map', null, matrix_stringified_all, Phaser.Tilemap.CSV);
-
-    //  Create our map (the 16x16 is the tile size)
-
     map = game.add.tilemap('map', 16, 16);
-    //  'tiles' = cache image key, 16x16 = tile size
-
-
-    // map.addTilesetImage('1', '1', 32,32 )
     map.addTilesetImage('map_sheet')
-
-
-    //  0 is important
     layer = map.createLayer(0);
-    layer.scale = {x:2,y:2};
+    layer.resizeWorld();
+    map.setCollisionBetween(2,2)
+    // layer.debug = true
 
-    //  Scroll it
-
-
-    l_data = layer.layer.data;
-    l_data[0][1].setCollision(true,true,true,true);
-    console.log(l_data[0][1]);
-
-    for(var x = 0; x<l_data.lenght; x++){
-      for (var y; y<l_data[x].length; y++){
-        if(l_data[x][y].index == 21){
-          console.log(l_data[x][y]);
-        }
-      }
-    }
-    p = game.add.sprite(64,64, "player");
-    p.scale.setTo(1,1)
+    p = game.add.sprite(64,64, "player_sheet");
+    p.scale.setTo(0.5,0.5)
+    p.animations.add('left',[0,1,2,3],10, true);
+    p.animations.add('right', [32,33,34,35], 10, true);
+    p.animations.add('up',[16,17,18,19],10,true);
+    p.animations.add('down',[48,49,50,51], 10, true);
     o = game.add.sprite(128,128,"orc");
-    o.scale.setTo(1,1)
-    game.physics.startSystem(Phaser.Physics.ARCADE);
+    o.scale.setTo(0.5,0.5)
 
-    game.physics.arcade.enable(p);
-    game.physics.arcade.enable(o);
+
+    game.physics.arcade.enable(p, Phaser.Physics.ARCADE);
+    game.physics.arcade.enable(o, Phaser.Physics.ARCADE);
     p.body.collideWorldBounds = true;
     o.body.collideWorldBounds = true;
 
     game.camera.follow(p);
-
+    // o.body.on.collide = new Phaser.Signal();
+    // o.body.on.collide.add(fight, this)
     cursors = game.input.keyboard.createCursorKeys();
-    layer.resizeWorld();
+
 }
 function topdownTightFollow() {
     game.camera.follow(p, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
     style = 'STYLE_TOPDOWN_TIGHT';
 }
+// function fight(){
+//   o.
+// }
+
 function update() {
 
 
-game.physics.arcade.collide(p,l_data[0][1], collisionCallback, processCallback, this)
-game.physics.arcade.collide(p,o)
 p.body.velocity.x = 0
 p.body.velocity.y = 0
 
+game.physics.arcade.collide(p, layer)
+game.physics.arcade.collide(p, o)
+game.physics.arcade.collide(o, layer)
+
+
+
     if (cursors.left.isDown)
     {
-        p.body.velocity.x = -200;
+        p.body.velocity.x = -128;
+        p.animations.play('left');
     }
     else if (cursors.right.isDown)
     {
-        p.body.velocity.x = 200;
+        p.body.velocity.x = 128;
+        p.animations.play('right');
     }
 
-    if (cursors.up.isDown)
+    else if (cursors.up.isDown)
     {
-        p.body.velocity.y = -200;
+        p.body.velocity.y = -128;
+        p.animations.play('up');
     }
     else if (cursors.down.isDown)
     {
-        p.body.velocity.y = 200;
+        p.body.velocity.y = 128;
+        p.animations.play('down');
+    }
+    else{
+        p.animations.stop();
+        p.frame = 49;
     }
 
 }

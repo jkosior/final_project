@@ -9,6 +9,7 @@ class Being(models.Model):
     experience = models.IntegerField(null = True)
     weapon = models.ForeignKey('Weapon', null = True, blank = True)
     armor = models.ForeignKey("Armor", null = True, blank = True)
+    description = models.TextField(null = True)
     is_playable = models.BooleanField(default = True)
     
     def __str__(self):
@@ -31,13 +32,16 @@ class Armor(models.Model):
         
 class Player(models.Model):
     user = models.ForeignKey(User)
+    name = models.CharField(max_length = 32, null = True)
     avatar = models.ForeignKey('Being', limit_choices_to={"is_playable":True})
-    score = models.ForeignKey('Score', null = True)
-    best_score = models.IntegerField(null = True)
+    score = models.IntegerField(default = 0)
+    
     
     def __str__(self):
-        return self.user
+        return self.name
     
-class Score(models.Model):
-    score = models.IntegerField(null = True)
+    
+    
+# class BestScores(models.Model):
+    
     

@@ -20,4 +20,4 @@ class ArmorSerializer(serializers.HyperlinkedModelSerializer):
 class PlayerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Player
-        fields = ['user','avatar', 'score','best_score']
+        fields = ['user','avatar', 'score']

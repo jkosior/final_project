@@ -8,9 +8,10 @@ from django.contrib.auth.models import User
 class PlayerForm(ModelForm):
     class Meta:
         model = Player
-        fields = ['avatar']
+        fields = ['name','avatar']
         widgets = {
             'avatar':RadioSelect()}
+        
 
 class UserForm(ModelForm):
     class Meta:

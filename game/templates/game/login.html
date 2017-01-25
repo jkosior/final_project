@@ -7,7 +7,11 @@
 {% csrf_token %}
 {{ form.as_p }}
 <input type="submit"
-value="Utwórz">
+value="Login">
+</form>
+<br>
+<form action="{%url 'create'%}" method="get">
+  <input type="submit" value = "Create">
 </form>
 </body>
 </html>

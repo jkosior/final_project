@@ -17,4 +17,4 @@ class AdminArmor(admin.ModelAdmin):
     
 @admin.register(Player)
 class AdminPlayer(admin.ModelAdmin):
-    list_display = ['user','avatar','score', 'best_score']
+    list_display = ['user','avatar','score']

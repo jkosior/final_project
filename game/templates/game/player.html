@@ -11,6 +11,11 @@
   {{ form.as_p }}
   <input type="submit"
   value="Create player">
-
+</form>
+<br>
+<form action = '{%url "logout"%}' method="get">
+  <input type="submit"
+  value = "Logout">
+</form>
 </body>
 </html>
