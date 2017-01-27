@@ -166,11 +166,9 @@ var Randomize = {
 var game = new Phaser.Game(1600, 1200, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
 
 function preload() {
-    $.ajax({
-      url:'players',
-      data:$(this).serialize();
-      headers: {'X-CSRFToken': getCookie('csrftoken'),
-    'sessionid': getCookie('sessionid')}
+    $.post({
+      url:'/players/',
+      data:$(this).serialize(),
       success: function(data){
         console.log(this);
 
