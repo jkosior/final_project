@@ -167,11 +167,12 @@ var game = new Phaser.Game(1600, 1200, Phaser.CANVAS, 'phaser-example', { preloa
 
 function preload() {
     $.ajax({
-      url:"weapons/?format=json",
-      data:{},
-      type:'GET',
-      dataType:'json',
-      success: function(json){
+      url:'players',
+      data:$(this).serialize();
+      headers: {'X-CSRFToken': getCookie('csrftoken'),
+    'sessionid': getCookie('sessionid')}
+      success: function(data){
+        console.log(this);
 
       },
     })
